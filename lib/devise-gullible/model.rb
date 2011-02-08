@@ -1,5 +1,4 @@
-require 'devise/strategies/database_authenticatable'
-require 'bcrypt'
+require 'strategy'
 
 module Devise
   module Models
@@ -19,69 +18,10 @@ module Devise
     module Gullible
       extend ActiveSupport::Concern
 
-      included do
-        attr_reader :password, :current_password
-        attr_accessor :password_confirmation
-      end
-
-      # Generates password encryption based on the given value.
-      def password=(new_password)
-        @password = new_password
-        self.encrypted_password = password_digest(@password) if @password.present?
-      end
-
-      # Verifies whether an incoming_password (ie from sign in) is the user password.
-      def valid_password?(password)
-        ::BCrypt::Password.new(self.encrypted_password) == "#{password}#{self.class.pepper}"
-      end
-
-      # Set password and password confirmation to nil
-      def clean_up_passwords
-        self.password = self.password_confirmation = nil
-      end
-
-      # Update record attributes when :current_password matches, otherwise returns
-      # error on :current_password. It also automatically rejects :password and
-      # :password_confirmation if they are blank.
-      def update_with_password(params={})
-        current_password = params.delete(:current_password)
-
-        if params[:password].blank?
-          params.delete(:password)
-          params.delete(:password_confirmation) if params[:password_confirmation].blank?
-        end
-
-        result = if valid_password?(current_password)
-          update_attributes(params)
-        else
-          self.errors.add(:current_password, current_password.blank? ? :blank : :invalid)
-          self.attributes = params
-          false
-        end
-
-        clean_up_passwords
-        result
-      end
-
       def after_database_authentication
       end
 
-      # A reliable way to expose the salt regardless of the implementation.
-      def authenticatable_salt
-        self.encrypted_password[0,29] if self.encrypted_password
-      end
-
     protected
-
-      # Downcase case-insensitive keys
-      def downcase_keys
-        self.class.case_insensitive_keys.each { |k| self[k].try(:downcase!) }
-      end
-
-      # Digests the password using bcrypt.
-      def password_digest(password)
-        ::BCrypt::Password.create("#{password}#{self.class.pepper}", :cost => self.class.stretches).to_s
-      end
 
       module ClassMethods
         Devise::Models.config(self, :pepper, :stretches)
