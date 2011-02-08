@@ -22,7 +22,6 @@ module Devise
       included do
         attr_reader :password, :current_password
         attr_accessor :password_confirmation
-        before_save :downcase_keys
       end
 
       # Generates password encryption based on the given value.
