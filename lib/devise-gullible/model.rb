@@ -1,5 +1,3 @@
-require 'strategy'
-
 module Devise
   module Models
     # Authenticatable Module, responsible for encrypting password and validating
