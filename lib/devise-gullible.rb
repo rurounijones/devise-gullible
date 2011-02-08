@@ -11,5 +11,5 @@ Devise.add_module(:gullible,
   :strategy => true,
   :route => :session,
   :controller => :sessions,
-  :modele => 'devise-gullible/model'
+  :model => 'devise-gullible/model'
 )
