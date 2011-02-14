@@ -2,9 +2,6 @@
 require 'devise'
 require 'devise-gullible/strategy'
 
-module Devise
-end
-
 # Add +:gullible+ strategies to defaults.
 #
 Devise.add_module(:gullible,

@@ -2,7 +2,7 @@ require 'devise/strategies/authenticatable'
 
 module Devise
   module Strategies
-    # Default strategy for signing in a user, based on his email and password in the database.
+    # Lobotomised version of database_authenticatable, checks that the identifier is in the database with no password functionality.
     class Gullible < Authenticatable
       def authenticate!
         resource = mapping.to.find_for_database_authentication(authentication_hash)

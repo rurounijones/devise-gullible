@@ -1,6 +1,16 @@
 = devise-gullible
 
-Description goes here.
+A brain-dead 'authentication' strategy for devise which only checks that the provided identifier (email, username, whatever) is in the database.
+
+THERE IS NO PASSWORD CHECKING. 
+
+Useful for those niche situations where full on passworded users are not required but you would like to use devise anyway 
+(For example using devise with different models with different authentcation strategies)
+
+This library was hacked together in a few hours by looking at existing devise extensions and the main devise source code. It was built mainly by taking
+the Devise database_authenticatable strategy and suitably lobotomising it.
+
+There are no tests; you have been warned.
 
 == Contributing to devise-gullible
  
